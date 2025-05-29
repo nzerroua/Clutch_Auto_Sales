@@ -1,0 +1,55 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+model Car {
+  id             Int       @id @default(autoincrement())
+  make           String
+  model          String
+  style          String
+  year           Int
+  price          Float
+  mileage        Int
+  description    String?       // Optional
+  features       String[]      // Keep as array, can be empty
+  transmission   String?       // Optional
+  drivetrain     String?       // Optional
+  fuelType       String?       // Optional
+  exteriorColor  String?       // Optional
+  interiorColor  String?       // Optional
+  engine         String?       // Optional
+  vin            String?       // Optional
+  imageUrls      String[]
+  createdAt      DateTime @default(now())
+
+  @@index([make])
+  @@index([model])
+  @@index([style])
+}
+
+
+model ContactForm {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  message   String?
+  createdAt DateTime @default(now())
+}
+
+model FinancingRequest {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  message   String?
+  createdAt DateTime @default(now())
+}
