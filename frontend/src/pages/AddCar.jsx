@@ -81,12 +81,16 @@ export default function AddCar() {
     try {
       const token = localStorage.getItem("admin_token");
 
-      const res = await axios.post("http://localhost:5000/api/cars", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post(
+        "https://clutch-auto-sales.onrender.com/api/cars",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (res.status === 201) {
         setSuccess(true);

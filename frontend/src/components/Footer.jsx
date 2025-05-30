@@ -12,7 +12,9 @@ export default function Footer() {
           </p>
           <div className="flex space-x-4">
             <a
-              href="https://www.facebook.com/profile.php?id=61573200333143#"
+              href="https://www.facebook.com/profile.php?id=61573200333143"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-red-500 transition"
             >
               <span className="sr-only">Facebook</span>
@@ -29,7 +31,12 @@ export default function Footer() {
                 />
               </svg>
             </a>
-            <a href="#" className="text-gray-400 hover:text-red-500 transition">
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-red-500 transition"
+            >
               <span className="sr-only">Instagram</span>
               <svg
                 className="h-6 w-6"

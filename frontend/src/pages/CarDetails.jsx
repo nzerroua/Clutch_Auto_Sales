@@ -14,7 +14,6 @@ import {
   CalendarDays,
   FileText,
   CheckCircle,
-  RotateCcw,
 } from "lucide-react";
 
 import "swiper/css";
@@ -30,7 +29,7 @@ export default function CarDetails() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/cars/${id}`)
+      .get(`https://clutch-auto-sales.onrender.com/api/cars/${id}`)
       .then((res) => setCar(res.data))
       .catch((err) => {
         console.error(err);
@@ -56,7 +55,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={`http://localhost:5000${url}`}
+              src={`https://clutch-auto-sales.onrender.com${url}`}
               alt={`${car.make} ${car.model} ${idx + 1}`}
               className="w-full h-[500px] object-cover select-none pointer-events-none"
             />
@@ -75,7 +74,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={`http://localhost:5000${url}`}
+              src={`https://clutch-auto-sales.onrender.com${url}`}
               alt={`Thumbnail ${idx + 1}`}
               className="w-full h-24 object-cover cursor-pointer border border-gray-300 rounded-md"
             />
@@ -83,9 +82,8 @@ export default function CarDetails() {
         ))}
       </Swiper>
 
-      {/* Title + Price (Left/Right, Responsive with fixed pill-style price) */}
+      {/* Title + Price */}
       <div className="mb-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        {/* Left */}
         <div>
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900">
             {car.year} {car.make} {car.model}
@@ -94,8 +92,6 @@ export default function CarDetails() {
             {car.mileage.toLocaleString()} miles • {car.style}
           </p>
         </div>
-
-        {/* Right */}
         <div className="self-start md:self-auto">
           <div className="bg-red-100 text-red-700 font-bold text-xl px-6 py-2 rounded-full shadow-sm inline-block">
             ${car.price.toLocaleString()}
@@ -116,7 +112,7 @@ export default function CarDetails() {
         </div>
       )}
 
-      {/* Specifications */}
+      {/* Specs */}
       <div className="grid md:grid-cols-2 gap-10 mb-12">
         <div className="space-y-4 text-gray-800">
           <h3 className="text-xl font-semibold text-black">Overview</h3>

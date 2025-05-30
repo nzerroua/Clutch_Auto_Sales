@@ -33,7 +33,10 @@ export default function Navbar() {
   useEffect(() => {
     const fetchStyles = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/cars/filters");
+        const res = await axios.get(
+          "https://clutch-auto-sales.onrender.com/api/cars/filters"
+        );
+
         setStyles(res.data.styles || []);
       } catch (err) {
         console.error("Error fetching styles:", err);

@@ -8,9 +8,11 @@ export default function AdminDashboard() {
   const [cars, setCars] = useState([]);
   const [error, setError] = useState("");
 
+  const API_URL = "https://clutch-auto-sales.onrender.com";
+
   const fetchCars = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/cars?limit=1000");
+      const res = await axios.get(`${API_URL}/api/cars?limit=1000`);
       setCars(res.data.cars || []);
     } catch {
       setError("Failed to load cars.");
@@ -27,7 +29,7 @@ export default function AdminDashboard() {
     try {
       const token = localStorage.getItem("admin_token");
 
-      await axios.delete(`http://localhost:5000/api/cars/${id}`, {
+      await axios.delete(`${API_URL}/api/cars/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

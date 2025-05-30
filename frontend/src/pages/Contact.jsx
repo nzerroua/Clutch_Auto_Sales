@@ -1,3 +1,4 @@
+// File: src/pages/Contact.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { FaMapMarkerAlt, FaPhone, FaClock } from "react-icons/fa";
@@ -48,7 +49,11 @@ export default function Contact() {
     }
 
     try {
-      await axios.post("/api/forms/contact", form);
+      await axios.post(
+        "https://clutch-auto-sales.onrender.com/api/forms/contact",
+        form
+      );
+
       setSubmitted(true);
       setForm({
         firstName: "",

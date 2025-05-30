@@ -7,10 +7,11 @@ export default function AdminContactForms() {
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("admin_token");
+  const API_URL = "https://clutch-auto-sales.onrender.com";
 
   const fetchForms = async () => {
     try {
-      const res = await axios.get("/api/forms/contact", {
+      const res = await axios.get(`${API_URL}/api/forms/contact`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,7 +31,7 @@ export default function AdminContactForms() {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`/api/forms/contact/${id}`, {
+      await axios.delete(`${API_URL}/api/forms/contact/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -48,7 +49,7 @@ export default function AdminContactForms() {
     if (!confirmed) return;
 
     try {
-      await axios.delete("/api/forms/contact", {
+      await axios.delete(`${API_URL}/api/forms/contact`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

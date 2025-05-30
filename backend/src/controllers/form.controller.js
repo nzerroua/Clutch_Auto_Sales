@@ -1,9 +1,7 @@
 // File: src/controllers/form.controller.js
 
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prismaClient.js";
 import { sendEmail } from "../utils/mailer.js";
-
-const prisma = new PrismaClient();
 
 // 📩 Submit Contact Form
 export const submitContactForm = async (req, res) => {

@@ -10,7 +10,7 @@ export default function CarCard({ car }) {
       <Link to={`/cars/${car.id}`}>
         <div className="overflow-hidden h-44 sm:h-48">
           <img
-            src={`http://localhost:5000${firstImage}`}
+            src={`https://clutch-auto-sales.onrender.com${firstImage}`}
             alt={`${car.year} ${car.make} ${car.model}`}
             className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
           />

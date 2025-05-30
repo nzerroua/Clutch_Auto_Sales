@@ -14,9 +14,12 @@ export default function InventoryFilter({ filters, setFilters }) {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/cars/filters", {
-          params: { make: filters.make || "" },
-        });
+        const res = await axios.get(
+          "https://clutch-auto-sales.onrender.com/api/cars/filters",
+          {
+            params: { make: filters.make || "" },
+          }
+        );
         setOptions(res.data);
       } catch (err) {
         console.error("Error fetching filter options:", err);

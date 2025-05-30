@@ -15,7 +15,9 @@ export default function InventoryCard({ car }) {
       {/* Image */}
       <Link to={`/cars/${car.id}`} className="block relative overflow-hidden">
         <img
-          src={`http://localhost:5000${car.imageUrls?.[0] || ""}`}
+          src={`https://clutch-auto-sales.onrender.com${
+            car.imageUrls?.[0] || ""
+          }`}
           alt={`${car.year} ${car.make} ${car.model}`}
           className="w-full h-56 object-cover transition duration-500 group-hover:scale-105"
         />

@@ -15,7 +15,7 @@ export default function EditCar() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/cars/${id}`)
+      .get(`https://clutch-auto-sales.onrender.com/api/cars/${id}`)
       .then((res) => {
         setForm(res.data);
         setExistingImages(res.data.imageUrls || []);
@@ -80,12 +80,16 @@ export default function EditCar() {
       validExistingImages.forEach((url) => formData.append("imageUrls", url));
       newImages.forEach((img) => formData.append("images", img));
 
-      await axios.put(`http://localhost:5000/api/cars/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.put(
+        `https://clutch-auto-sales.onrender.com/api/cars/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       navigate("/admin");
     } catch (err) {
@@ -164,7 +168,7 @@ export default function EditCar() {
               .map((url, idx) => (
                 <div key={idx} className="relative">
                   <img
-                    src={`http://localhost:5000${url}`}
+                    src={`https://clutch-auto-sales.onrender.com${url}`}
                     alt={`Car ${idx}`}
                     className="w-full h-24 object-cover rounded shadow"
                     onError={() => handleRemoveImage(url)}

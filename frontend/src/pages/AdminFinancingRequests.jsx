@@ -7,10 +7,11 @@ export default function AdminFinancingRequests() {
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("admin_token");
+  const API_URL = "https://clutch-auto-sales.onrender.com";
 
   const fetchRequests = async () => {
     try {
-      const res = await axios.get("/api/forms/financing", {
+      const res = await axios.get(`${API_URL}/api/forms/financing`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,7 +31,7 @@ export default function AdminFinancingRequests() {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`/api/forms/financing/${id}`, {
+      await axios.delete(`${API_URL}/api/forms/financing/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -48,7 +49,7 @@ export default function AdminFinancingRequests() {
     if (!confirmed) return;
 
     try {
-      await axios.delete("/api/forms/financing", {
+      await axios.delete(`${API_URL}/api/forms/financing`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

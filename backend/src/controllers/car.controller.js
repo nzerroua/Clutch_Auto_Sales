@@ -1,10 +1,8 @@
 //car.controller.js
 
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prismaClient.js";
 import fs from "fs";
 import path from "path";
-
-const prisma = new PrismaClient();
 
 // GET all cars with filters
 export const getCars = async (req, res) => {

@@ -14,7 +14,9 @@ export default function FeaturedSection() {
     const fetchFeaturedCars = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get("/api/cars");
+        const response = await axios.get(
+          "https://your-backend-name.onrender.com/api/cars"
+        );
         setCars(response.data.cars || response.data); // Support both old and new formats
         setError(null);
       } catch (err) {

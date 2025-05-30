@@ -46,7 +46,10 @@ export default function Financing() {
 
     setIsLoading(true);
     try {
-      await axios.post("/api/forms/financing", form);
+      await axios.post(
+        "https://clutch-auto-sales.onrender.com/api/forms/financing",
+        form
+      );
       setSubmitted(true);
       setForm({
         firstName: "",
