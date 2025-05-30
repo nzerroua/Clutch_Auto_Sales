@@ -17,7 +17,7 @@ const uploadToSupabase = async (file) => {
 
   const fileName = `${Date.now()}-${file.originalname}`;
   const { error } = await supabase.storage
-    .from("cars")
+    .from("car-images")
     .upload(fileName, file.buffer, {
       contentType: file.mimetype,
     });
@@ -35,7 +35,7 @@ const deleteFromSupabase = async (url) => {
   const parts = url.split("/cars/");
   if (parts.length !== 2) return;
   const filePath = `cars/${parts[1]}`;
-  await supabase.storage.from("cars").remove([filePath]);
+  (await supabase.storcar) - images.remove([filePath]);
 };
 
 // GET all cars
