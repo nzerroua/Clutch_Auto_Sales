@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { BadgeDollarSign, Gauge } from "lucide-react";
 
 export default function CarCard({ car }) {
-  const firstImage = car.imageUrls?.[0] || "/fallback.jpg";
+  const firstImage = car.imageUrls?.[0] || "/fallback.jpg"; // full Supabase URL or fallback
 
   return (
     <div className="w-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
@@ -10,7 +10,7 @@ export default function CarCard({ car }) {
       <Link to={`/cars/${car.id}`}>
         <div className="overflow-hidden h-44 sm:h-48">
           <img
-            src={`https://clutch-auto-sales.onrender.com${firstImage}`}
+            src={firstImage}
             alt={`${car.year} ${car.make} ${car.model}`}
             className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
           />

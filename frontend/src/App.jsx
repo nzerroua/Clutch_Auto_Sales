@@ -25,11 +25,11 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/About" element={<About />} />
+          <Route path="/about" element={<About />} />
           <Route path="/cars/:id" element={<CarDetails />} />
-          <Route path="/Inventory" element={<Inventory />} />
-          <Route path="/Contact" element={<Contact />} />
-          <Route path="/Financing" element={<Financing />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/financing" element={<Financing />} />
 
           {/* Admin Auth Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />

@@ -5,7 +5,7 @@ const prisma = new PrismaClient({
   __internal: {
     engine: {
       enableQueryEngine: true,
-      enablePreparedStatements: false, // ✅ Important for Supabase
+      enablePreparedStatements: false, // Important for Supabase
     },
   },
 });

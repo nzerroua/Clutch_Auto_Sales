@@ -1,10 +1,44 @@
-//car.controller.js
-
+// car.controller.js
 import prisma from "../lib/prismaClient.js";
-import fs from "fs";
+import supabase from "../utils/supabaseClient.js";
 import path from "path";
 
-// GET all cars with filters
+// Helper: Upload a file to Supabase with validation
+const uploadToSupabase = async (file) => {
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+  if (!ALLOWED_TYPES.includes(file.mimetype)) {
+    throw new Error("Invalid file type. Only JPG, PNG, WEBP allowed.");
+  }
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error("File size exceeds 5MB limit.");
+  }
+
+  const fileName = `${Date.now()}-${file.originalname}`;
+  const { error } = await supabase.storage
+    .from("cars")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+    });
+
+  if (error) {
+    console.error("Supabase upload error:", error);
+    throw new Error("Failed to upload image");
+  }
+
+  return `${process.env.SUPABASE_URL}/storage/v1/object/public/cars/${fileName}`;
+};
+
+// Helper: Delete a file from Supabase Storage
+const deleteFromSupabase = async (url) => {
+  const parts = url.split("/cars/");
+  if (parts.length !== 2) return;
+  const filePath = `cars/${parts[1]}`;
+  await supabase.storage.from("cars").remove([filePath]);
+};
+
+// GET all cars
 export const getCars = async (req, res) => {
   try {
     const {
@@ -106,7 +140,11 @@ export const addCar = async (req, res) => {
     model = capitalize(model);
     style = capitalize(style);
 
-    const imageUrls = req.files.map((file) => `/uploads/${file.filename}`);
+    const imageUrls = [];
+    for (const file of req.files) {
+      const url = await uploadToSupabase(file);
+      imageUrls.push(url);
+    }
 
     const car = await prisma.car.create({
       data: {
@@ -137,7 +175,7 @@ export const addCar = async (req, res) => {
     res.status(201).json(car);
   } catch (err) {
     console.error("Error adding car:", err);
-    res.status(500).json({ error: "Failed to create car" });
+    res.status(500).json({ error: err.message || "Failed to create car" });
   }
 };
 
@@ -155,6 +193,7 @@ export const updateCar = async (req, res) => {
       return res.status(404).json({ error: "Car not found" });
     }
 
+    // Handle existing image URLs from client
     let parsed = [];
     const imageField = raw.imageUrls;
 
@@ -167,70 +206,63 @@ export const updateCar = async (req, res) => {
     }
 
     parsed = parsed.map((s) => s.trim()).filter(Boolean);
-    let updatedImageUrls = parsed.filter(
-      (url) => typeof url === "string" && url.startsWith("/uploads/")
-    );
-    updatedImageUrls = [...new Set(updatedImageUrls)];
+    let updatedImageUrls = [...new Set(parsed)];
 
-    const newImages =
-      req.files?.map((file) => `/uploads/${file.filename}`) || [];
-    const finalImageUrls = [...new Set([...updatedImageUrls, ...newImages])];
+    // Upload new images and merge
+    const newImageUrls = [];
+    if (req.files?.length) {
+      for (const file of req.files) {
+        const url = await uploadToSupabase(file);
+        newImageUrls.push(url);
+      }
+    }
+
+    const finalImageUrls = [...new Set([...updatedImageUrls, ...newImageUrls])];
 
     if (finalImageUrls.length > 10) {
       return res.status(400).json({ error: "Maximum 10 images allowed." });
     }
 
-    const data = {
-      make: raw.make,
-      model: raw.model,
-      style: raw.style,
-      year: parseInt(raw.year),
-      price: parseFloat(raw.price),
-      mileage: parseInt(raw.mileage),
-      description: raw.description === "null" ? null : raw.description,
-      transmission: raw.transmission === "null" ? null : raw.transmission,
-      drivetrain: raw.drivetrain === "null" ? null : raw.drivetrain,
-      fuelType: raw.fuelType === "null" ? null : raw.fuelType,
-      exteriorColor: raw.exteriorColor === "null" ? null : raw.exteriorColor,
-      interiorColor: raw.interiorColor === "null" ? null : raw.interiorColor,
-      engine: raw.engine === "null" ? null : raw.engine,
-      vin: raw.vin === "null" ? null : raw.vin,
-      features:
-        typeof raw.features === "string"
-          ? raw.features
-              .split(",")
-              .map((f) => f.trim())
-              .filter(Boolean)
-          : [],
-      imageUrls: finalImageUrls,
-    };
-
+    // Remove deleted images from Supabase
     const removedImages = existingCar.imageUrls.filter(
       (url) => !finalImageUrls.includes(url)
     );
-    for (const fileUrl of removedImages) {
-      const filePath = path.join(
-        process.cwd(),
-        "uploads",
-        path.basename(fileUrl)
-      );
-      if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => {
-          if (err) console.warn("❌ Failed to delete:", filePath);
-          else console.log("🗑️ Deleted:", filePath);
-        });
-      }
+    for (const url of removedImages) {
+      await deleteFromSupabase(url);
     }
 
     const updatedCar = await prisma.car.update({
       where: { id: parseInt(id) },
-      data,
+      data: {
+        make: raw.make,
+        model: raw.model,
+        style: raw.style,
+        year: parseInt(raw.year),
+        price: parseFloat(raw.price),
+        mileage: parseInt(raw.mileage),
+        description: raw.description === "null" ? null : raw.description,
+        transmission: raw.transmission === "null" ? null : raw.transmission,
+        drivetrain: raw.drivetrain === "null" ? null : raw.drivetrain,
+        fuelType: raw.fuelType === "null" ? null : raw.fuelType,
+        exteriorColor: raw.exteriorColor === "null" ? null : raw.exteriorColor,
+        interiorColor: raw.interiorColor === "null" ? null : raw.interiorColor,
+        engine: raw.engine === "null" ? null : raw.engine,
+        vin: raw.vin === "null" ? null : raw.vin,
+        features:
+          typeof raw.features === "string"
+            ? raw.features
+                .split(",")
+                .map((f) => f.trim())
+                .filter(Boolean)
+            : [],
+        imageUrls: finalImageUrls,
+      },
     });
 
     res.json(updatedCar);
   } catch (err) {
     console.error("🚨 Error updating car:", err);
-    res.status(500).json({ error: "Failed to update car" });
+    res.status(500).json({ error: err.message || "Failed to update car" });
   }
 };
 
@@ -238,28 +270,17 @@ export const updateCar = async (req, res) => {
 export const deleteCar = async (req, res) => {
   try {
     const { id } = req.params;
-
     const car = await prisma.car.findUnique({ where: { id: parseInt(id) } });
-    if (car?.imageUrls?.length) {
-      for (const fileUrl of car.imageUrls) {
-        const filePath = path.join(
-          process.cwd(),
-          "uploads",
-          path.basename(fileUrl)
-        );
-        if (fs.existsSync(filePath)) {
-          fs.unlink(filePath, (err) => {
-            if (err) console.warn("❌ Failed to delete:", filePath);
-            else console.log("🗑️ Deleted:", filePath);
-          });
-        }
+    if (!car) return res.status(404).json({ error: "Car not found" });
+
+    // Delete all images from Supabase
+    if (car.imageUrls?.length) {
+      for (const url of car.imageUrls) {
+        await deleteFromSupabase(url);
       }
     }
 
-    await prisma.car.delete({
-      where: { id: parseInt(id) },
-    });
-
+    await prisma.car.delete({ where: { id: parseInt(id) } });
     res.json({ message: "Car deleted successfully." });
   } catch (err) {
     console.error("Error deleting car:", err);

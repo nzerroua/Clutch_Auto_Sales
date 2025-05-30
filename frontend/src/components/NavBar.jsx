@@ -34,7 +34,7 @@ export default function Navbar() {
     const fetchStyles = async () => {
       try {
         const res = await axios.get(
-          "https://clutch-auto-sales.onrender.com/api/cars/filters"
+          `${import.meta.env.VITE_API_BASE_URL}/api/cars/filters`
         );
 
         setStyles(res.data.styles || []);

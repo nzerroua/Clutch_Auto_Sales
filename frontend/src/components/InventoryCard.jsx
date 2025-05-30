@@ -10,14 +10,14 @@ import {
 } from "react-icons/fa";
 
 export default function InventoryCard({ car }) {
+  const imageUrl = car.imageUrls?.[0] || "/fallback.jpg"; // fallback image
+
   return (
     <div className="rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 group">
       {/* Image */}
       <Link to={`/cars/${car.id}`} className="block relative overflow-hidden">
         <img
-          src={`https://clutch-auto-sales.onrender.com${
-            car.imageUrls?.[0] || ""
-          }`}
+          src={imageUrl}
           alt={`${car.year} ${car.make} ${car.model}`}
           className="w-full h-56 object-cover transition duration-500 group-hover:scale-105"
         />

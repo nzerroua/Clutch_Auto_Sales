@@ -13,16 +13,8 @@ import { verifyAdmin } from "../middleware/auth.js"; // ✅ Admin auth middlewar
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// ✅ Multer config for image uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-const upload = multer({ storage });
+// ✅ Multer config for in-memory image uploads (for Supabase)
+const upload = multer({ storage: multer.memoryStorage() });
 
 // ✅ Public route: Get all cars with filters and pagination
 router.get("/", getCars);

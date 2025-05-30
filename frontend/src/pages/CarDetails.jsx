@@ -1,3 +1,4 @@
+// File: src/pages/CarDetails.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -55,7 +56,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={`https://clutch-auto-sales.onrender.com${url}`}
+              src={url}
               alt={`${car.make} ${car.model} ${idx + 1}`}
               className="w-full h-[500px] object-cover select-none pointer-events-none"
             />
@@ -74,7 +75,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={`https://clutch-auto-sales.onrender.com${url}`}
+              src={url}
               alt={`Thumbnail ${idx + 1}`}
               className="w-full h-24 object-cover cursor-pointer border border-gray-300 rounded-md"
             />

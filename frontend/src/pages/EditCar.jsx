@@ -65,19 +65,7 @@ export default function EditCar() {
           : (form.features || []).join(", ");
       formData.append("features", formattedFeatures);
 
-      const validExistingImages = Array.from(
-        new Set(
-          existingImages.filter(
-            (img) => typeof img === "string" && img.startsWith("/uploads/")
-          )
-        )
-      );
-
-      if (validExistingImages.length + newImages.length > 10) {
-        return setError("You can upload up to 10 images max.");
-      }
-
-      validExistingImages.forEach((url) => formData.append("imageUrls", url));
+      existingImages.forEach((url) => formData.append("imageUrls", url));
       newImages.forEach((img) => formData.append("images", img));
 
       await axios.put(
@@ -163,25 +151,23 @@ export default function EditCar() {
         <div>
           <p className="font-semibold mb-2 text-gray-700">Existing Images:</p>
           <div className="grid grid-cols-3 gap-3">
-            {existingImages
-              .filter((url) => typeof url === "string" && url.trim() !== "")
-              .map((url, idx) => (
-                <div key={idx} className="relative">
-                  <img
-                    src={`https://clutch-auto-sales.onrender.com${url}`}
-                    alt={`Car ${idx}`}
-                    className="w-full h-24 object-cover rounded shadow"
-                    onError={() => handleRemoveImage(url)}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(url)}
-                    className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 text-xs rounded"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
+            {existingImages.map((url, idx) => (
+              <div key={idx} className="relative">
+                <img
+                  src={url}
+                  alt={`Car ${idx}`}
+                  className="w-full h-24 object-cover rounded shadow"
+                  onError={() => handleRemoveImage(url)}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(url)}
+                  className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 text-xs rounded"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 

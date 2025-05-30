@@ -30,7 +30,7 @@ export default function InventoryGrid({ filters }) {
         params.append("limit", LIMIT);
 
         const res = await axios.get(
-          `https://clutch-auto-sales.onrender.com/api/cars?${params.toString()}`
+          `${import.meta.env.VITE_API_BASE_URL}/api/cars?${params.toString()}`
         );
 
         setCars(res.data.cars);
@@ -58,7 +58,7 @@ export default function InventoryGrid({ filters }) {
       params.append("limit", LIMIT);
 
       const res = await axios.get(
-        `https://clutch-auto-sales.onrender.com/api/cars?${params.toString()}`
+        `${import.meta.env.VITE_API_BASE_URL}/api/cars?${params.toString()}`
       );
 
       const newCars = res.data.cars;

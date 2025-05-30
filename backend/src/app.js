@@ -13,11 +13,8 @@ const app = express();
 app.use(cors());
 
 // ✅ Body parsers
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
-
-// ✅ Serve uploaded images
-app.use("/uploads", express.static("uploads"));
 
 // ✅ API routes
 app.use("/api/cars", carRoutes);

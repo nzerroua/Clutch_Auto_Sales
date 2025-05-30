@@ -1,3 +1,4 @@
+// File: FeaturedSection.jsx
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import CarCard from "./CarCard";
@@ -15,9 +16,9 @@ export default function FeaturedSection() {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "https://your-backend-name.onrender.com/api/cars"
+          `${import.meta.env.VITE_API_BASE_URL}/api/cars`
         );
-        setCars(response.data.cars || response.data); // Support both old and new formats
+        setCars(response.data.cars || response.data);
         setError(null);
       } catch (err) {
         console.error("Failed to fetch featured vehicles:", err);
@@ -29,6 +30,7 @@ export default function FeaturedSection() {
 
     fetchFeaturedCars();
   }, []);
+
   useEffect(() => {
     const startAutoScroll = () => {
       scrollIntervalRef.current = setInterval(() => {
