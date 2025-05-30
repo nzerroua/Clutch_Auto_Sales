@@ -1,7 +1,6 @@
 // car.controller.js
 import prisma from "../lib/prismaClient.js";
 import supabase from "../utils/supabaseClient.js";
-import path from "path";
 
 // Helper: Upload a file to Supabase with validation
 const uploadToSupabase = async (file) => {
@@ -27,15 +26,15 @@ const uploadToSupabase = async (file) => {
     throw new Error("Failed to upload image");
   }
 
-  return `${process.env.SUPABASE_URL}/storage/v1/object/public/cars/${fileName}`;
+  return `${process.env.SUPABASE_URL}/storage/v1/object/public/car-images/${fileName}`;
 };
 
 // Helper: Delete a file from Supabase Storage
 const deleteFromSupabase = async (url) => {
-  const parts = url.split("/cars/");
+  const parts = url.split("/car-images/");
   if (parts.length !== 2) return;
-  const filePath = `cars/${parts[1]}`;
-  (await supabase.storcar) - images.remove([filePath]);
+  const filePath = parts[1];
+  await supabase.storage.from("car-images").remove([filePath]);
 };
 
 // GET all cars
@@ -273,7 +272,6 @@ export const deleteCar = async (req, res) => {
     const car = await prisma.car.findUnique({ where: { id: parseInt(id) } });
     if (!car) return res.status(404).json({ error: "Car not found" });
 
-    // Delete all images from Supabase
     if (car.imageUrls?.length) {
       for (const url of car.imageUrls) {
         await deleteFromSupabase(url);

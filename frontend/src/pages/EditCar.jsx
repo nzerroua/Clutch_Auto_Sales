@@ -13,9 +13,6 @@ export default function EditCar() {
   const fileInputRef = useRef(null);
   const messageRef = useRef(null);
 
-  const SUPABASE_PUBLIC_URL =
-    "https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images";
-
   useEffect(() => {
     axios
       .get(`https://clutch-auto-sales.onrender.com/api/cars/${id}`)
@@ -68,6 +65,7 @@ export default function EditCar() {
           : (form.features || []).join(", ");
       formData.append("features", formattedFeatures);
 
+      // Add each image URL as a separate imageUrls field
       existingImages.forEach((url) => formData.append("imageUrls", url));
       newImages.forEach((img) => formData.append("images", img));
 
@@ -157,9 +155,7 @@ export default function EditCar() {
             {existingImages.map((url, idx) => (
               <div key={idx} className="relative">
                 <img
-                  src={
-                    url.includes("http") ? url : `${SUPABASE_PUBLIC_URL}/${url}`
-                  }
+                  src={url}
                   alt={`Car ${idx}`}
                   className="w-full h-24 object-cover rounded shadow"
                   onError={() => handleRemoveImage(url)}
