@@ -22,6 +22,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 
+const supabaseBaseUrl =
+  "https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images/";
+
 export default function CarDetails() {
   const { id } = useParams();
   const [car, setCar] = useState(null);
@@ -56,7 +59,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={url}
+              src={`${supabaseBaseUrl}${url}`}
               alt={`${car.make} ${car.model} ${idx + 1}`}
               className="w-full h-[500px] object-cover select-none pointer-events-none"
             />
@@ -75,7 +78,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={url}
+              src={`${supabaseBaseUrl}${url}`}
               alt={`Thumbnail ${idx + 1}`}
               className="w-full h-24 object-cover cursor-pointer border border-gray-300 rounded-md"
             />

@@ -10,7 +10,10 @@ import {
 } from "react-icons/fa";
 
 export default function InventoryCard({ car }) {
-  const imageUrl = car.imageUrls?.[0] || "/fallback.jpg"; // fallback image
+  const imageUrl = car.imageUrls?.[0]?.includes("http")
+    ? car.imageUrls[0]
+    : `https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images/${car.imageUrls[0]}` ||
+      "/fallback.jpg";
 
   return (
     <div className="rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 group">
