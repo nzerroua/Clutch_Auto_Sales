@@ -22,7 +22,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 
-const supabaseBaseUrl =
+const SUPABASE_PUBLIC_URL =
   "https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images/";
 
 export default function CarDetails() {
@@ -44,6 +44,9 @@ export default function CarDetails() {
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
   if (!car) return <p className="text-center mt-10">Loading...</p>;
 
+  const formatUrl = (url) =>
+    url.includes("http") ? url : `${SUPABASE_PUBLIC_URL}${url}`;
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       {/* Image Gallery */}
@@ -59,7 +62,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={`${supabaseBaseUrl}${url}`}
+              src={formatUrl(url)}
               alt={`${car.make} ${car.model} ${idx + 1}`}
               className="w-full h-[500px] object-cover select-none pointer-events-none"
             />
@@ -78,7 +81,7 @@ export default function CarDetails() {
         {car.imageUrls.map((url, idx) => (
           <SwiperSlide key={idx}>
             <img
-              src={`${supabaseBaseUrl}${url}`}
+              src={formatUrl(url)}
               alt={`Thumbnail ${idx + 1}`}
               className="w-full h-24 object-cover cursor-pointer border border-gray-300 rounded-md"
             />

@@ -2,10 +2,15 @@ import { Link } from "react-router-dom";
 import { BadgeDollarSign, Gauge } from "lucide-react";
 
 export default function CarCard({ car }) {
-  const firstImage = car.imageUrls?.[0]?.includes("http")
-    ? car.imageUrls[0]
-    : `https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images/${car.imageUrls[0]}` ||
-      "/fallback.jpg";
+  const baseURL =
+    "https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images";
+
+  const firstImage =
+    car.imageUrls?.[0] && car.imageUrls[0].includes("http")
+      ? car.imageUrls[0]
+      : car.imageUrls?.[0]
+      ? `${baseURL}/${car.imageUrls[0]}`
+      : "/fallback.jpg";
 
   return (
     <div className="w-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">

@@ -3,6 +3,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const supabaseBaseUrl =
+  "https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images/";
+
 export default function EditCar() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -10,6 +13,7 @@ export default function EditCar() {
   const [error, setError] = useState("");
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]);
   const fileInputRef = useRef(null);
   const messageRef = useRef(null);
 
@@ -39,6 +43,7 @@ export default function EditCar() {
   const handleRemoveImage = (urlToRemove) => {
     const filtered = existingImages.filter((url) => url !== urlToRemove);
     setExistingImages(filtered);
+    setDeletedImages((prev) => [...prev, urlToRemove]);
     setForm((prev) => ({ ...prev, imageUrls: filtered }));
   };
 
@@ -65,9 +70,9 @@ export default function EditCar() {
           : (form.features || []).join(", ");
       formData.append("features", formattedFeatures);
 
-      // Add each image URL as a separate imageUrls field
       existingImages.forEach((url) => formData.append("imageUrls", url));
       newImages.forEach((img) => formData.append("images", img));
+      deletedImages.forEach((url) => formData.append("deletedImages", url));
 
       await axios.put(
         `https://clutch-auto-sales.onrender.com/api/cars/${id}`,
@@ -155,7 +160,7 @@ export default function EditCar() {
             {existingImages.map((url, idx) => (
               <div key={idx} className="relative">
                 <img
-                  src={url}
+                  src={url.includes("http") ? url : `${supabaseBaseUrl}${url}`}
                   alt={`Car ${idx}`}
                   className="w-full h-24 object-cover rounded shadow"
                   onError={() => handleRemoveImage(url)}

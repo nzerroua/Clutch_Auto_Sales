@@ -10,17 +10,21 @@ import {
 } from "react-icons/fa";
 
 export default function InventoryCard({ car }) {
-  const imageUrl = car.imageUrls?.[0]?.includes("http")
-    ? car.imageUrls[0]
-    : `https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images/${car.imageUrls[0]}` ||
-      "/fallback.jpg";
+  const baseURL =
+    "https://yopqiqlfpckbketdxdrm.supabase.co/storage/v1/object/public/car-images";
+  const firstImage =
+    car.imageUrls?.[0] && car.imageUrls[0].includes("http")
+      ? car.imageUrls[0]
+      : car.imageUrls?.[0]
+      ? `${baseURL}/${car.imageUrls[0]}`
+      : "/fallback.jpg";
 
   return (
     <div className="rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 group">
       {/* Image */}
       <Link to={`/cars/${car.id}`} className="block relative overflow-hidden">
         <img
-          src={imageUrl}
+          src={firstImage}
           alt={`${car.year} ${car.make} ${car.model}`}
           className="w-full h-56 object-cover transition duration-500 group-hover:scale-105"
         />
@@ -33,7 +37,6 @@ export default function InventoryCard({ car }) {
 
       {/* Content */}
       <div className="p-5">
-        {/* Title + Price */}
         <div className="flex justify-between items-start mb-1">
           <Link to={`/cars/${car.id}`}>
             <h2 className="text-lg font-bold text-gray-900 hover:text-gray-700 transition">
@@ -45,10 +48,8 @@ export default function InventoryCard({ car }) {
           </p>
         </div>
 
-        {/* Sub Info */}
         <p className="text-sm text-gray-500 mb-3">{car.style}</p>
 
-        {/* Specs Grid */}
         <div className="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
           <div className="flex items-center">
             <FaTachometerAlt className="text-gray-400 mr-2" />
@@ -80,7 +81,6 @@ export default function InventoryCard({ car }) {
           )}
         </div>
 
-        {/* Features Preview */}
         {car.features?.length > 0 && (
           <div className="mb-4">
             <h4 className="text-xs font-semibold text-gray-500 uppercase mb-1">
@@ -104,7 +104,6 @@ export default function InventoryCard({ car }) {
           </div>
         )}
 
-        {/* Buttons */}
         <div className="flex gap-2">
           <Link
             to={`/cars/${car.id}`}

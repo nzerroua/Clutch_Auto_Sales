@@ -68,9 +68,8 @@ export default function AddCar() {
         value
           .split(",")
           .map((f) => f.trim())
-          .forEach((feature) => {
-            formData.append("features", feature);
-          });
+          .filter(Boolean)
+          .forEach((feature) => formData.append("features", feature));
       } else {
         formData.append(key, value);
       }
