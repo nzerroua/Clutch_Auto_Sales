@@ -141,8 +141,13 @@ export const addCar = async (req, res) => {
 
     const imageUrls = [];
     for (const file of req.files) {
-      const url = await uploadToSupabase(file);
-      imageUrls.push(url);
+      try {
+        const url = await uploadToSupabase(file);
+        imageUrls.push(url);
+      } catch (uploadError) {
+        console.error("Image upload error:", uploadError);
+        return res.status(400).json({ error: uploadError.message });
+      }
     }
 
     const car = await prisma.car.create({
@@ -211,8 +216,13 @@ export const updateCar = async (req, res) => {
     const newImageUrls = [];
     if (req.files?.length) {
       for (const file of req.files) {
-        const url = await uploadToSupabase(file);
-        newImageUrls.push(url);
+        try {
+          const url = await uploadToSupabase(file);
+          newImageUrls.push(url);
+        } catch (uploadError) {
+          console.error("Image upload error:", uploadError);
+          return res.status(400).json({ error: uploadError.message });
+        }
       }
     }
 
