@@ -1,4 +1,4 @@
-// car.controller.js
+// File: car.controller.js
 import prisma from "../lib/prismaClient.js";
 import supabase from "../utils/supabaseClient.js";
 
@@ -196,6 +196,13 @@ export const updateCar = async (req, res) => {
     if (!existingCar) {
       return res.status(404).json({ error: "Car not found" });
     }
+
+    // Normalize make, model, style
+    const capitalize = (s) =>
+      s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+    raw.make = capitalize(raw.make);
+    raw.model = capitalize(raw.model);
+    raw.style = capitalize(raw.style);
 
     // Handle existing image URLs from client
     let parsed = [];

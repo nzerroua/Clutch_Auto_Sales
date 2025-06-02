@@ -8,7 +8,7 @@ import {
   deleteCar,
 } from "../controllers/car.controller.js";
 import { PrismaClient } from "@prisma/client";
-import { verifyAdmin } from "../middleware/auth.js"; // ✅ Admin auth middleware
+import { verifyAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -31,10 +31,12 @@ router.delete("/:id", verifyAdmin, deleteCar);
 // ✅ Public route: Get filter options
 router.get("/filters", async (req, res) => {
   const { make } = req.query;
+
+  const normalize = (s) =>
+    s && typeof s === "string" ? s.trim().toLowerCase() : "";
+
   const capitalize = (str) =>
-    str && typeof str === "string"
-      ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
-      : str;
+    str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : str;
 
   try {
     const [makesRaw, stylesRaw, modelsRaw] = await Promise.all([
@@ -47,13 +49,17 @@ router.get("/filters", async (req, res) => {
       }),
     ]);
 
-    const makes = [...new Set(makesRaw.map((item) => capitalize(item.make)))];
+    const makes = [
+      ...new Set(makesRaw.map((item) => normalize(item.make))),
+    ].map(capitalize);
+
     const styles = [
-      ...new Set(stylesRaw.map((item) => capitalize(item.style))),
-    ];
+      ...new Set(stylesRaw.map((item) => normalize(item.style))),
+    ].map(capitalize);
+
     const models = [
-      ...new Set(modelsRaw.map((item) => capitalize(item.model))),
-    ];
+      ...new Set(modelsRaw.map((item) => normalize(item.model))),
+    ].map(capitalize);
 
     res.json({ makes, models, styles });
   } catch (err) {
