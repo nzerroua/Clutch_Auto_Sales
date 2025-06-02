@@ -88,7 +88,7 @@ export default function EditCar() {
       navigate("/admin");
     } catch (err) {
       console.error(err);
-      setError("Failed to update car.");
+      setError(err?.response?.data?.error || "Failed to update car.");
     }
   };
 
