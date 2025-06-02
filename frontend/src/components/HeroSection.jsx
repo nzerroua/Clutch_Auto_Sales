@@ -9,6 +9,17 @@ const images = [
 
 export default function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState([]);
+
+  useEffect(() => {
+    // Preload images
+    const preload = images.map((src) => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
+    setLoadedImages(preload);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -21,6 +32,7 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full h-screen -mt-20">
+      {/* Preloaded Background Image */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-1000"
         style={{
