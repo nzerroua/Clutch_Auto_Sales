@@ -9,42 +9,55 @@ const images = [
 
 export default function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loadedImages, setLoadedImages] = useState([]);
+  const [showFirst, setShowFirst] = useState(true); // Controls which layer is visible
+  const [bg1, setBg1] = useState(images[0]);
+  const [bg2, setBg2] = useState(images[1]);
 
   useEffect(() => {
-    // Preload images
-    const preload = images.map((src) => {
-      const img = new Image();
-      img.src = src;
-      return img;
-    });
-    setLoadedImages(preload);
-  }, []);
+    const interval = setInterval(() => {
+      const nextIndex = (currentIndex + 1) % images.length;
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      if (showFirst) {
+        setBg2(images[nextIndex]);
+      } else {
+        setBg1(images[nextIndex]);
+      }
+
+      setTimeout(() => {
+        setCurrentIndex(nextIndex);
+        setShowFirst((prev) => !prev);
+      }, 500); // matches fade duration
     }, 5000);
-    return () => clearInterval(timer);
-  }, []);
 
-  const goToImage = (index) => setCurrentIndex(index);
+    return () => clearInterval(interval);
+  }, [currentIndex, showFirst]);
+
+  const getOpacity = (isFirst) =>
+    showFirst === isFirst ? "opacity-100 z-10" : "opacity-0 z-0";
 
   return (
-    <section className="relative w-full h-screen -mt-20">
-      {/* Preloaded Background Image */}
+    <section className="relative w-full h-screen -mt-20 overflow-hidden">
+      {/* Background Layer 1 */}
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-1000"
-        style={{
-          backgroundImage: `url(${images[currentIndex]})`,
-        }}
-      ></div>
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${getOpacity(
+          true
+        )}`}
+        style={{ backgroundImage: `url(${bg1})` }}
+      />
+
+      {/* Background Layer 2 */}
+      <div
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${getOpacity(
+          false
+        )}`}
+        style={{ backgroundImage: `url(${bg2})` }}
+      />
 
       {/* Overlay */}
-      <div className="absolute inset-0 z-10 bg-black/50" />
+      <div className="absolute inset-0 z-20 bg-black/50" />
 
       {/* Foreground Content */}
-      <div className="relative z-20 h-full flex flex-col items-center justify-center text-center text-white px-4">
+      <div className="relative z-30 h-full flex flex-col items-center justify-center text-center text-white px-4">
         <img
           src="/images/logo.png"
           alt="ClutchAuto Logo"
@@ -70,7 +83,15 @@ export default function HeroSection() {
             {images.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToImage(index)}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  if (showFirst) {
+                    setBg2(images[index]);
+                  } else {
+                    setBg1(images[index]);
+                  }
+                  setShowFirst((prev) => !prev);
+                }}
                 className={`w-6 h-0.5 rounded-full transition ${
                   currentIndex === index ? "bg-white/70" : "bg-white/20"
                 }`}
