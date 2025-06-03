@@ -39,7 +39,7 @@ export default function HeroSection() {
     <section className="relative w-full h-screen -mt-20 overflow-hidden">
       {/* Background Layer 1 */}
       <div
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${getOpacity(
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1100ms] ${getOpacity(
           true
         )}`}
         style={{ backgroundImage: `url(${bg1})` }}
@@ -47,7 +47,7 @@ export default function HeroSection() {
 
       {/* Background Layer 2 */}
       <div
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${getOpacity(
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1100ms] ${getOpacity(
           false
         )}`}
         style={{ backgroundImage: `url(${bg2})` }}
