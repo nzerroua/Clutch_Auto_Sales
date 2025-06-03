@@ -33,7 +33,7 @@ export default function CarDetails() {
 
   useEffect(() => {
     axios
-      .get(`https://clutch-auto-sales.onrender.com/api/cars/${id}`)
+      .get(`https://clutchautosales-production.up.railway.app/api/cars/${id}`)
       .then((res) => setCar(res.data))
       .catch((err) => {
         console.error(err);

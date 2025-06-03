@@ -50,7 +50,7 @@ export default function Contact() {
 
     try {
       await axios.post(
-        "https://clutch-auto-sales.onrender.com/api/forms/contact",
+        "https://clutchautosales-production.up.railway.app/api/forms/contact",
         form
       );
 

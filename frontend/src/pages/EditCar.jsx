@@ -19,7 +19,7 @@ export default function EditCar() {
 
   useEffect(() => {
     axios
-      .get(`https://clutch-auto-sales.onrender.com/api/cars/${id}`)
+      .get(`https://clutchautosales-production.up.railway.app/api/cars/${id}`)
       .then((res) => {
         setForm(res.data);
         setExistingImages(res.data.imageUrls || []);
@@ -75,7 +75,7 @@ export default function EditCar() {
       deletedImages.forEach((url) => formData.append("deletedImages", url));
 
       await axios.put(
-        `https://clutch-auto-sales.onrender.com/api/cars/${id}`,
+        `https://clutchautosales-production.up.railway.app/api/cars/${id}`,
         formData,
         {
           headers: {

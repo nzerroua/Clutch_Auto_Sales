@@ -81,7 +81,7 @@ export default function AddCar() {
       const token = localStorage.getItem("admin_token");
 
       const res = await axios.post(
-        "https://clutch-auto-sales.onrender.com/api/cars",
+        "https://clutchautosales-production.up.railway.app/api/cars",
         formData,
         {
           headers: {

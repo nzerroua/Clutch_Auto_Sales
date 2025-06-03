@@ -18,7 +18,7 @@ export default function AdminLogin() {
 
     try {
       const res = await axios.post(
-        "https://clutch-auto-sales.onrender.com/api/auth/login",
+        "https://clutchautosales-production.up.railway.app/api/auth/login",
         form
       );
       const token = res.data.token;

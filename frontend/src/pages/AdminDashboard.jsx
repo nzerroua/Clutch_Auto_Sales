@@ -8,7 +8,7 @@ export default function AdminDashboard() {
   const [cars, setCars] = useState([]);
   const [error, setError] = useState("");
 
-  const API_URL = "https://clutch-auto-sales.onrender.com";
+  const API_URL = "https://clutchautosales-production.up.railway.app";
 
   const fetchCars = async () => {
     try {

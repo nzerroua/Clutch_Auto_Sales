@@ -7,7 +7,7 @@ export default function AdminContactForms() {
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("admin_token");
-  const API_URL = "https://clutch-auto-sales.onrender.com";
+  const API_URL = "https://clutchautosales-production.up.railway.app";
 
   const fetchForms = async () => {
     try {
