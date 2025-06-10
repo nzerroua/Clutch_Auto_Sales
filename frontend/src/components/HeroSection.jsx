@@ -1,3 +1,4 @@
+// Hero Section
 import { useEffect, useState } from "react";
 
 const images = [
